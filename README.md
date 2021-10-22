@@ -3,6 +3,8 @@
 [shill] is a command-line tool for translating natural language into programming
 language snippets using OpenAI's codex.
 
+[![License][license-shield]](LICENSE) [![Github
+tag][github-shield]][github]
 [![Build][build-shield]][build] [![Code
 coverage][coverage-shield]][coverage]
 
@@ -77,6 +79,9 @@ deno run -A --unstable dev.ts serve
 
 <!-- badges -->
 
+[github]: https://github.com/eibens/shill
+[github-shield]: https://img.shields.io/github/v/tag/eibens/shill?label&logo=github
+[license-shield]: https://img.shields.io/github/license/eibens/shill?color=informational
 [coverage-shield]: https://codecov.io/gh/eibens/shill/branch/master/graph/badge.svg?token=tf4kbmsw2A
 [coverage]: https://codecov.io/gh/eibens/shill
 [build]: https://github.com/eibens/shill/actions/workflows/ci.yml
