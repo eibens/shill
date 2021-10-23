@@ -202,11 +202,11 @@ async function main(options: Options) {
   // deno-lint-ignore camelcase
   const max_tokens = countTokens(prompt) + options.tokens;
   const data: QueryData = {
-    engine: "cushman-codex",
     // deno-lint-ignore camelcase
     max_tokens,
-    temperature: options.temp,
     prompt,
+    temperature: options.temp,
+    engine: options.engine,
   };
 
   console.error(fmt.cyan(`API parameters:`));
