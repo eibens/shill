@@ -42,6 +42,17 @@ const presets: Record<string, Preset> = {
         ``,
       ].join("\n"),
   },
+  preact: {
+    engine: "cushman-codex",
+    tokens: 1000,
+    temperature: 0.2,
+    template: (x: string) =>
+      [
+        'import * as React from "preact";',
+        "",
+        `// ${x}`,
+      ].join("\n"),
+  },
   react: {
     engine: "cushman-codex",
     tokens: 1000,
