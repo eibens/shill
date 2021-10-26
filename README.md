@@ -11,10 +11,10 @@ coverage][coverage-shield]][coverage]
 ## Install
 
 ```sh
-deno install -f \
+deno install -f -n shill \
 --allow-env=GPT3_API_KEY \
 --allow-net=api.openai.com \
-cli.ts
+https://raw.githubusercontent.com/eibens/shill/v1.0.0-alpha.1/cli.ts
 ```
 
 ## Usage
