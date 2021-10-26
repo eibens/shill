@@ -134,7 +134,7 @@ function parseArgs(options: CliOptions): Options {
       tokens: "n",
       help: "h",
       version: "v",
-      fast: "f"
+      fast: "f",
     },
   });
 
@@ -147,7 +147,7 @@ function parseArgs(options: CliOptions): Options {
     throw new Error(`Option 'preset' must be a valid preset.`);
   }
 
-  const presetEngine = flags.fast ? "cushman-codex" : "davinci-codex"
+  const presetEngine = flags.fast ? "cushman-codex" : "davinci-codex";
   const engine = flags.engine || presetEngine;
 
   const temp = parseFloat(flags.temp || preset.temperature);
