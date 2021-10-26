@@ -13,18 +13,15 @@ type Preset = {
   template: (x: string) => string;
   tokens: number;
   temperature: number;
-  engine: string;
 };
 
 const presets: Record<string, Preset> = {
   default: {
-    engine: "cushman-codex",
     tokens: 100,
     temperature: 0.2,
     template: (x) => x,
   },
   bash: {
-    engine: "cushman-codex",
     tokens: 100,
     temperature: 0.2,
     template: (x: string) =>
@@ -43,7 +40,6 @@ const presets: Record<string, Preset> = {
       ].join("\n"),
   },
   preact: {
-    engine: "cushman-codex",
     tokens: 1000,
     temperature: 0.2,
     template: (x: string) =>
@@ -54,7 +50,6 @@ const presets: Record<string, Preset> = {
       ].join("\n"),
   },
   react: {
-    engine: "cushman-codex",
     tokens: 1000,
     temperature: 0.2,
     template: (x: string) =>
@@ -91,6 +86,8 @@ OPTIONS:
 \t\tquery temperature (between 0 and 1)
 \t-n, --tokens=<num>
 \t\tmaximum output length (does not include prompt)
+\t-f, --fast
+\t\tuse a faster but less capable engine (cushman-codex) 
 
 PRESETS:
 ${Object.keys(presets).map((x) => `\t${x}\n`).join("")}
@@ -129,7 +126,7 @@ export type Options = {
 function parseArgs(options: CliOptions): Options {
   const flags = parse(options.args, {
     string: ["preset", "temp", "tokens", "engine"],
-    boolean: ["help", "version"],
+    boolean: ["help", "version", "fast"],
     alias: {
       preset: "p",
       engine: "e",
@@ -137,6 +134,7 @@ function parseArgs(options: CliOptions): Options {
       tokens: "n",
       help: "h",
       version: "v",
+      fast: "f"
     },
   });
 
@@ -149,7 +147,8 @@ function parseArgs(options: CliOptions): Options {
     throw new Error(`Option 'preset' must be a valid preset.`);
   }
 
-  const engine = flags.engine || preset.engine;
+  const presetEngine = flags.fast ? "cushman-codex" : "davinci-codex"
+  const engine = flags.engine || presetEngine;
 
   const temp = parseFloat(flags.temp || preset.temperature);
   if (isNaN(temp) || temp < 0 || 1 < temp) {
