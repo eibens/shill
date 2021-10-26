@@ -5,7 +5,7 @@ import {
   query,
   QueryData,
 } from "https://raw.githubusercontent.com/eibens/gpt3_utils/v1.0.0-alpha/mod.ts";
-import { parse as parseVersion } from "https://deno.land/x/module_url@v0.2.0/mod.ts";
+import { parse as parseVersion } from "https://deno.land/x/module_url@v0.3.0/mod.ts";
 
 // PRESETS
 
