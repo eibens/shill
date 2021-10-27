@@ -89,6 +89,8 @@ OPTIONS:
 \t\tname of the preset that should be used (default: default)
 \t-f, --fast
 \t\tshorthand for using cushman-codex as engine
+\t    --dry
+\t\ttry the shill command without making a Codex API request
 
 PRESETS:
 ${Object.keys(presets).map((x) => `\t${x}\n`).join("")}
@@ -116,6 +118,7 @@ export type CliOptions = {
 export type Options = {
   help: boolean;
   version: boolean;
+  dry: boolean;
   temp: number;
   tokens: number;
   prompt: string;
@@ -127,7 +130,7 @@ export type Options = {
 function parseArgs(options: CliOptions): Options {
   const flags = parse(options.args, {
     string: ["preset", "temp", "tokens", "engine"],
-    boolean: ["help", "version", "fast"],
+    boolean: ["help", "version", "dry", "fast"],
     alias: {
       preset: "p",
       engine: "e",
@@ -141,6 +144,7 @@ function parseArgs(options: CliOptions): Options {
 
   const help = Boolean(flags.help);
   const version = Boolean(flags.version);
+  const dry = Boolean(flags.dry);
 
   const presetName = flags.preset || "default";
   const preset = presets[presetName];
@@ -186,6 +190,7 @@ function parseArgs(options: CliOptions): Options {
     tokens,
     help,
     version,
+    dry,
     key,
   };
 }
@@ -220,11 +225,28 @@ async function main(options: Options) {
     engine: options.engine,
   };
   await logRequest(request, () => {
-    return query({
-      fetch,
-      auth: () => Promise.resolve(options.key),
-      data: request,
-    });
+    if (options.dry) {
+      // Return some placeholder data for the dry run.
+      return Promise.resolve({
+        id: "<none>",
+        model: "<none>",
+        object: "<none>",
+        created: Math.round(Date.now() / 1000),
+        choices: [{
+          index: 0,
+          logprobs: null,
+          finish_reason: "<none>",
+          text: fmt.bold(fmt.red("\n(this was a dry run)")),
+        }],
+      });
+    } else {
+      // Return the result of an actual OpenAI API request.
+      return query({
+        fetch,
+        auth: () => Promise.resolve(options.key),
+        data: request,
+      });
+    }
   });
 }
 
