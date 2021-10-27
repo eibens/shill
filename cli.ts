@@ -250,7 +250,7 @@ async function logRequest(request: QueryData, run: () => Promise<QueryResult>) {
       finish_reason: choice.finish_reason,
       logprobs: choice.logprobs,
     });
-    log("\n" + prompt + choice.text + "\n");
+    log("\n" + request.prompt + choice.text + "\n");
   }
 }
 
