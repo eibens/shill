@@ -18,7 +18,7 @@ type Preset = {
 const presets: Record<string, Preset> = {
   default: {
     tokens: 100,
-    temperature: 0.2,
+    temperature: 0.5,
     template: (x) => x,
   },
   bash: {
