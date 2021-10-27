@@ -1,7 +1,6 @@
 # [shill]
 
-[shill] is a command-line tool for translating natural language into programming
-language snippets using OpenAI's codex.
+[shill] is a command-line tool for interacting with OpenAI's API.
 
 [![License][license-shield]](LICENSE) [![Github
 tag][github-shield]][github]
@@ -19,8 +18,8 @@ https://raw.githubusercontent.com/eibens/shill/v1.0.0-alpha.1/cli.ts
 
 ## Usage
 
-An OpenAI API key with access to the Codex series is needed to use [shill].
-Specify it by setting the `GPT3_API_KEY` environment variable.
+An OpenAI API key is needed to use [shill]. Specify it by setting the
+`GPT3_API_KEY` environment variable.
 
 ```sh
 export GPT3_API_KEY="<your key>"

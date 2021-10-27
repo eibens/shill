@@ -65,14 +65,14 @@ const presets: Record<string, Preset> = {
 // CLI PAGES
 
 const HELP = `
-shill: generates code using OpenAI's Codex
+shill: generates text using OpenAI's API
 
 USAGE:
 \tshill [...options] <prompt>
 
 ARGUMENTS:
 \tprompt
-\t\tinput text for the Codex API query
+\t\tinput text for the OpenAI API query
 
 OPTIONS: 
 \t-h, --help
@@ -80,7 +80,7 @@ OPTIONS:
 \t-v, --version
 \t\tshow the shill command's version and exit
 \t-e, --engine=<name>
-\t\tname of codex engine (default: davinci-codex)
+\t\tname of language engine (default: davinci-codex)
 \t-t, --temp=<num>
 \t\tquery temperature (default: 0.5)
 \t-n, --tokens=<num>
@@ -90,14 +90,14 @@ OPTIONS:
 \t-f, --fast
 \t\tshorthand for using cushman-codex as engine
 \t    --dry
-\t\ttry the shill command without making a Codex API request
+\t\ttry the shill command without making an API request
 
 PRESETS:
 ${Object.keys(presets).map((x) => `\t${x}\n`).join("")}
 
 ENVIRONMENT:
 \tGPT3_API_KEY
-\t\tOpenAI API key with Codex access
+\t\tsecret key provided by OpenAI
 `.trimStart();
 
 const version = parseVersion(import.meta.url);
