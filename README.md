@@ -70,9 +70,6 @@ done
 ```sh
 # Format, lint, and run tests.
 deno run -A dev.ts
-
-# Start the dev server.
-deno run -A --unstable dev.ts serve
 ```
 
 [shill]: #
