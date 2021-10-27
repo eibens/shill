@@ -78,16 +78,16 @@ OPTIONS:
 \t\tshow this help message and exit
 \t-v, --version
 \t\tshow the shill command's version and exit
-\t-p, --preset=<name>
-\t\tname of the preset that should be used
 \t-e, --engine=<name>
-\t\tname of codex engine (davinci-codex or cushman-codex)
+\t\tname of codex engine (default: davinci-codex)
 \t-t, --temp=<num>
-\t\tquery temperature (between 0 and 1)
+\t\tquery temperature (default: 0.5)
 \t-n, --tokens=<num>
-\t\tmaximum output length (does not include prompt)
+\t\tmaximum output length excluding prompt length (default: 100)
+\t-p, --preset=<name>
+\t\tname of the preset that should be used (default: default)
 \t-f, --fast
-\t\tuse a faster but less capable engine (cushman-codex) 
+\t\tshorthand for using cushman-codex as engine
 
 PRESETS:
 ${Object.keys(presets).map((x) => `\t${x}\n`).join("")}
