@@ -4,6 +4,7 @@ import { countTokens } from "https://raw.githubusercontent.com/eibens/gpt3_utils
 import {
   query,
   QueryData,
+  QueryResult,
 } from "https://raw.githubusercontent.com/eibens/gpt3_utils/v1.0.0-alpha/mod.ts";
 import { parse as parseVersion } from "https://deno.land/x/module_url@v0.3.0/mod.ts";
 
@@ -218,23 +219,26 @@ async function main(options: Options) {
     temperature: options.temp,
     engine: options.engine,
   };
+  await logRequest(request, () => {
+    return query({
+      fetch,
+      auth: () => Promise.resolve(options.key),
+      data: request,
+    });
+  });
+}
 
+async function logRequest(request: QueryData, run: () => Promise<QueryResult>) {
   // Log prompt parameters.
-  const bold = (x: unknown) => fmt.bold(String(x));
-
   logObject(fmt.green(`request`), {
     engine: request.engine,
     temperature: request.temperature,
     max_tokens: request.max_tokens,
   });
 
-  const result = await query({
-    fetch,
-    auth: () => Promise.resolve(options.key),
-    data: request,
-  });
+  const result = await run();
 
-  logObject(fmt.green(`response ${bold(result.id)}`), {
+  logObject(fmt.green(`response ${fmt.bold(result.id)}`), {
     model: result.model,
     object: result.object,
     created: result.created,
@@ -242,7 +246,7 @@ async function main(options: Options) {
   });
 
   for (const choice of result.choices) {
-    logObject(fmt.yellow(`choice ${bold(choice.index)}`), {
+    logObject(fmt.yellow(`choice ${fmt.bold(String(choice.index))}`), {
       finish_reason: choice.finish_reason,
       logprobs: choice.logprobs,
     });
