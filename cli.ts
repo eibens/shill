@@ -211,7 +211,7 @@ async function main(options: Options) {
   const prompt = options.template(options.prompt);
   // deno-lint-ignore camelcase
   const max_tokens = countTokens(prompt) + options.tokens;
-  const data: QueryData = {
+  const request: QueryData = {
     // deno-lint-ignore camelcase
     max_tokens,
     prompt,
@@ -219,21 +219,47 @@ async function main(options: Options) {
     engine: options.engine,
   };
 
-  console.error(fmt.cyan(`API parameters:`));
-  for (const key in data) {
-    console.error(
-      `- ${fmt.italic(key)}: ${fmt.bold(String(data[key as never]))}`,
-    );
-  }
+  // Log prompt parameters.
+  const bold = (x: unknown) => fmt.bold(String(x));
+
+  logObject(fmt.green(`request`), {
+    engine: request.engine,
+    temperature: request.temperature,
+    max_tokens: request.max_tokens,
+  });
 
   const result = await query({
     fetch,
     auth: () => Promise.resolve(options.key),
-    data,
+    data: request,
   });
-  const output = result.choices[0].text
-    .split("# ---")[0].trim();
-  console.log(output);
+
+  logObject(fmt.green(`response ${bold(result.id)}`), {
+    model: result.model,
+    object: result.object,
+    created: result.created,
+    choices: result.choices.length,
+  });
+
+  for (const choice of result.choices) {
+    logObject(fmt.yellow(`choice ${bold(choice.index)}`), {
+      finish_reason: choice.finish_reason,
+      logprobs: choice.logprobs,
+    });
+    log("\n" + prompt + choice.text + "\n");
+  }
+}
+
+function log(value: unknown) {
+  Deno.stderr.write(new TextEncoder().encode(String(value)));
+}
+
+function logObject(title: string, props: Record<string, unknown>) {
+  log("\n" + title + "\n");
+  for (const key in props) {
+    const value = props[key];
+    log(`  - ${key}: ${fmt.bold(String(value))}` + "\n");
+  }
 }
 
 // RUN
