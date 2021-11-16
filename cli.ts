@@ -61,38 +61,34 @@ const presets: Record<string, Preset> = {
 const HELP = `
 shill: generates text using OpenAI's API
 
-USAGE:
-\tshill [...options] <prompt>
+Usage:
+  shill [...options] <prompt>
 
-ARGUMENTS:
-\tprompt
-\t\tinput text for the OpenAI API query
+Arguments:
+  <prompt>             input text for the completion
 
-OPTIONS: 
-\t-h, --help
-\t\tshow this help message and exit
-\t-v, --version
-\t\tshow the shill command's version and exit
-\t-e, --engine=<name>
-\t\tname of language engine (default: davinci-codex)
-\t-t, --temp=<num>
-\t\tquery temperature (default: 0.5)
-\t-n, --tokens=<num>
-\t\tmaximum output length excluding prompt length (default: 100)
-\t-p, --preset=<name>
-\t\tname of the preset that should be used (default: default)
-\t-f, --fast
-\t\tshorthand for using cushman-codex as engine
-\t    --dry
-\t\ttry the shill command without making an API request
+Options: 
+  -h, --help           show this help message and exit
+  -v, --version        show the shill command's version and exit
+  -e, --engine=<name>  name of language engine [default: davinci-codex]
+  -t, --temp=<num>     query temperature [default: 0.5]
+  -n, --tokens=<num>   maximum output length excluding prompt length [default: 100]
+  -p, --preset=<name>  name of the preset that should be used [default: default]
+  -f, --fast           shorthand for using cushman-codex as engine
+      --dry            try the shill command without making an API request
 
-PRESETS:
-${Object.keys(presets).map((x) => `\t${x}\n`).join("")}
+Presets:
+  -p default           use default settings
+  -p bash              generate a bash command
+  -p preact            generate UI code with Preact
+  -p react             generate UI code with React
 
-ENVIRONMENT:
-\tOPENAI_API_KEY
-\t\tsecret key provided by OpenAI
-`.trimStart();
+Environment variables:
+  OPENAI_API_KEY       secret key provided by OpenAI
+
+Docs:
+  http://github.com/eibens/shill
+`.trim();
 
 const version = parseVersion(import.meta.url);
 const VERSION = `
