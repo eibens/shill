@@ -27,17 +27,10 @@ const presets: Record<string, Preset> = {
     temperature: 0.2,
     template: (x: string) =>
       [
-        "# ---",
-        "# List all files in the directory.",
-        "ls",
-        ``,
-        "# ---",
         "# Navigate out of the current directory.",
         "cd ..",
         ``,
-        "# ---",
-        `# ${x.trim()}`,
-        ``,
+        x,
       ].join("\n"),
   },
   preact: {
@@ -47,7 +40,7 @@ const presets: Record<string, Preset> = {
       [
         'import * as React from "preact";',
         "",
-        `// ${x}`,
+        x,
       ].join("\n"),
   },
   react: {
@@ -57,7 +50,7 @@ const presets: Record<string, Preset> = {
       [
         'import * as React from "react";',
         "",
-        `// ${x}`,
+        x,
       ].join("\n"),
   },
 };
