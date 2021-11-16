@@ -13,7 +13,7 @@ coverage][coverage-shield]][coverage]
 deno install -f -n shill \
 --allow-env=OPENAI_API_KEY \
 --allow-net=api.openai.com \
-https://raw.githubusercontent.com/eibens/shill/v1.0.0-alpha.1/cli.ts
+https://raw.githubusercontent.com/eibens/shill/master/cli.ts
 ```
 
 ## Usage
