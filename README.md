@@ -11,7 +11,7 @@ coverage][coverage-shield]][coverage]
 
 ```sh
 deno install -f -n shill \
---allow-env=GPT3_API_KEY \
+--allow-env=OPENAI_API_KEY \
 --allow-net=api.openai.com \
 https://raw.githubusercontent.com/eibens/shill/v1.0.0-alpha.1/cli.ts
 ```
@@ -19,10 +19,10 @@ https://raw.githubusercontent.com/eibens/shill/v1.0.0-alpha.1/cli.ts
 ## Usage
 
 An OpenAI API key is needed to use [shill]. Specify it by setting the
-`GPT3_API_KEY` environment variable.
+`OPENAI_API_KEY` environment variable.
 
 ```sh
-export GPT3_API_KEY="<your key>"
+export OPENAI_API_KEY="<your key>"
 shill [options] <prompt>
 ```
 

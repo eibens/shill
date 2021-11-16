@@ -89,7 +89,7 @@ PRESETS:
 ${Object.keys(presets).map((x) => `\t${x}\n`).join("")}
 
 ENVIRONMENT:
-\tGPT3_API_KEY
+\tOPENAI_API_KEY
 \t\tsecret key provided by OpenAI
 `.trimStart();
 
@@ -161,7 +161,7 @@ function parseArgs(options: CliOptions): Options {
   }
 
   const prompt = String(flags._[0] || "");
-  const keyEnv = "GPT3_API_KEY";
+  const keyEnv = "OPENAI_API_KEY";
   const key = options.env.get(keyEnv) || "";
 
   if (!help && !version) {
