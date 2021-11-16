@@ -1,16 +1,16 @@
 import * as fmt from "https://deno.land/std@0.111.0/fmt/colors.ts";
 import { parse } from "https://deno.land/std@0.111.0/flags/mod.ts";
-import { countTokens } from "https://raw.githubusercontent.com/eibens/gpt3_utils/v1.0.0-alpha/tokenize.ts";
+import { countTokens } from "https://raw.githubusercontent.com/eibens/gpt3_utils/v1.0.0-alpha.3/tokenize.ts";
 import {
-  query,
-  QueryData,
-  QueryResult,
-} from "https://raw.githubusercontent.com/eibens/gpt3_utils/v1.0.0-alpha/mod.ts";
+  CompletionParams,
+  CompletionResult,
+  create,
+} from "https://raw.githubusercontent.com/eibens/gpt3_utils/v1.0.0-alpha.3/completions.ts";
 import { parse as parseVersion } from "https://deno.land/x/module_url@v0.3.0/mod.ts";
 
 // PRESETS
 
-type Preset = {
+type Preset = Partial<CompletionParams> & {
   template: (x: string) => string;
   tokens: number;
   temperature: number;
@@ -25,6 +25,7 @@ const presets: Record<string, Preset> = {
   bash: {
     tokens: 100,
     temperature: 0.2,
+    stop: "",
     template: (x: string) =>
       [
         "# Navigate out of the current directory.",
@@ -208,16 +209,14 @@ export function cli(options: CliOptions) {
 
 async function main(options: Options) {
   const prompt = options.template(options.prompt);
-  // deno-lint-ignore camelcase
-  const max_tokens = countTokens(prompt) + options.tokens;
-  const request: QueryData = {
-    // deno-lint-ignore camelcase
-    max_tokens,
+  const maxTokens = countTokens(prompt) + options.tokens;
+  const params: CompletionParams = {
+    maxTokens,
     prompt,
     temperature: options.temp,
     engine: options.engine,
   };
-  await logRequest(request, () => {
+  await logRequest(params, () => {
     if (options.dry) {
       // Return some placeholder data for the dry run.
       return Promise.resolve({
@@ -228,27 +227,30 @@ async function main(options: Options) {
         choices: [{
           index: 0,
           logprobs: null,
-          finish_reason: "<none>",
+          finishReason: "<none>",
           text: fmt.bold(fmt.red("\n(this was a dry run)")),
         }],
       });
     } else {
       // Return the result of an actual OpenAI API request.
-      return query({
+      return create({
         fetch,
-        auth: () => Promise.resolve(options.key),
-        data: request,
+        apiKey: options.key,
+        params,
       });
     }
   });
 }
 
-async function logRequest(request: QueryData, run: () => Promise<QueryResult>) {
+async function logRequest(
+  params: CompletionParams,
+  run: () => Promise<CompletionResult>,
+) {
   // Log prompt parameters.
   logObject(fmt.green(`request`), {
-    engine: request.engine,
-    temperature: request.temperature,
-    max_tokens: request.max_tokens,
+    engine: params.engine,
+    temperature: params.temperature,
+    max_tokens: params.maxTokens,
   });
 
   const result = await run();
@@ -262,10 +264,10 @@ async function logRequest(request: QueryData, run: () => Promise<QueryResult>) {
 
   for (const choice of result.choices) {
     logObject(fmt.yellow(`choice ${fmt.bold(String(choice.index))}`), {
-      finish_reason: choice.finish_reason,
+      finish_reason: choice.finishReason,
       logprobs: choice.logprobs,
     });
-    log("\n" + request.prompt + choice.text + "\n");
+    log("\n" + params.prompt + choice.text + "\n");
   }
 }
 
